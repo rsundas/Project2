@@ -4,6 +4,7 @@ import './App.css';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -21,11 +22,11 @@ class App extends Component {
 
   handleChangeFname = (e) => {
     this.setState({ firstName: e.target.value })
-   
+
   }
   handleChangelname = (e) => {
     this.setState({ lastName: e.target.value })
-    
+
   }
   handleChangeDob = (e) => {
     this.setState({ dateOfBirth: e.target.value })
@@ -44,39 +45,50 @@ class App extends Component {
   }
 
   saveDetails = () => {
-    if(this.state.firstName === null || this.state.firstName === "")
-    {
+    if (this.state.firstName === null || this.state.firstName === "") {
       alert("Enter First Name.....");
       return false;
     }
-    if(this.state.lastName === null || this.state.lastName === "")
-    {
+    if (!/^[a-zA-Z]*$/g.test(this.state.firstName)) {
+      alert("Enter the valid First name");
+      return false;
+    }
+    if (this.state.lastName === null || this.state.lastName === "") {
       alert("Enter Last Name....");
       return false;
     }
-    if(this.state.dateOfBirth === null || this.state.dateOfBirth === "")
-    {
+    if (!/^[a-zA-Z]*$/g.test(this.state.lastName)) {
+      alert("Enter the valid Last name");
+      return false;
+    }
+    if (this.state.dateOfBirth === null || this.state.dateOfBirth === "") {
       alert("Enter the Date of Birth");
       return false;
     }
-    if(this.state.genderChecked === null || this.state.genderChecked === "")
-    {
-      alert ("Select the Gender....");
+    var d = new Date(this.state.dateOfBirth);
+    var today = new Date();
+
+    var dob = this.state.dateOfBirth;
+    var pattern = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
+    if (dob === null || dob === "" || !pattern.test(dob) || d > today) {
+      alert("Invalid date of birth");
+      return false;
+
+    }
+    if (this.state.genderChecked === null || this.state.genderChecked === "") {
+      alert("Select the Gender....");
       return false;
     }
-    if(this.state.addressDetails === null || this.state.addressDetails === "")
-    {
+    if (this.state.addressDetails === null || this.state.addressDetails === "") {
       alert("Enter Address....");
       return false;
     }
-    if(this.state.companyName === null || this.state.companyName === "")
-    {
+    if (this.state.companyName === null || this.state.companyName === "") {
       alert("Enter the Company Name....");
       return false;
     }
-    if(this.state.designation === null || this.state.designation === "")
-    {
-      alert ("Enter the designation");
+    if (this.state.designation === null || this.state.designation === "") {
+      alert("Enter the designation");
       return false;
     }
     var { Employee } = this.state;
@@ -90,55 +102,48 @@ class App extends Component {
     obj.designation = this.state.designation;
 
     Employee.push(obj);
-    
-    this.setState({firstName : "", lastName : "", dateOfBirth : "", genderChecked :"", addressDetails : "", companyName : "", designation :""});
+
+    this.setState({ firstName: "", lastName: "", dateOfBirth: "", genderChecked: "", addressDetails: "", companyName: "", designation: "" });
     this.setState({ Employee: Employee });
+    //console.log(Employee);
   }
-  
+
   cancelDetails = (e) => {
-    this.setState({firstName : "", lastName : "", dateOfBirth : "", genderChecked :"", addressDetails : "", companyName : "", designation :""});
-   
+    this.setState({ firstName: "", lastName: "", dateOfBirth: "", genderChecked: "", addressDetails: "", companyName: "", designation: "" });
+
   }
-  editRow = (value) =>{
-  //this.state = {value};
-  //this.refs.myTextInput.value = this.state.firstName;
-  //   var newData = this.state.value.slice(); //copy array
-  //   newData.splice(index, 1); //remove element
-  //   this.setState({data: newData});
-  //  console.log(value);
-    //var newEmployee = this.state.value;
-    
-    // var array = this.state;
-    // var index = array.indexOf(e.target.value)
-    // array.splice(index, 1);
-    // this.setState({state: array });
-   // console.log(newEmployee);
-    
-    // var index = newEmployee.indexOf(value.target.value);
-    // delete newEmployee[index];
-    // this.state = newEmployee.value;
-    //this.setState(this.state);
-    //newEmployee = this.state.value;
-    //this.setState(this.state.value);
-    //this.state.firstName = newEmployee.firstName;
-    this.setState({firstName: value.firstName})
-   console.log(this.state);
-    //var {Employee} 
+  editRow = (value) => {
+    var  Employee= this.state;
+   // console.log(Employee.indexOf(this.state.firstName));
+    this.setState({ firstName: value.firstName })
+    this.setState({ lastName: value.lastName })
+    this.setState({ genderChecked: value.genderChecked })
+    this.setState({ companyName: value.companyName })
+    this.setState({ designation: value.designation })
+    this.setState({ dateOfBirth: value.dateOfBirth })
+    this.setState({ addressDetails: value.addressDetails })
+    //var findIndex = Employee.find()
+    //this.setState({ Employee: Employee });
+    console.log(Employee);
+    //console.log(this.state);
+      
     
   }
   deleteRow = (value) => {
-   // console.log(value);
-  //  this.state = {value};
-  //  this.state.splice(index, 1);
+    
+    value.firstName = "";
+    value.lastName = "";
+    this.setState({value});
+    
     
   }
   render() {
-    //const {firstName, lastName, genderChecked, companyName,designation, dateOfBirth} = this.state;
+    
     var isEnable = true;
     Object.keys(this.state).forEach((val) => {
       if (!this.state[val])
         isEnable = false;
-    }); 
+    });
     var { Employee } = this.state;
     return (
       <div>
@@ -202,8 +207,8 @@ class App extends Component {
 
           </form>
           <div>
-            <button className="sub-btn" onClick={this.saveDetails.bind(this)}  disabled={!isEnable}> Save </button>
-            <button className="sub-btn" onClick={this.cancelDetails}  disabled={!isEnable} > Cancel </button>
+            <button className="sub-btn" onClick={this.saveDetails.bind(this)} disabled={!isEnable}> Save </button>
+            <button className="sub-btn" onClick={this.cancelDetails} disabled={!isEnable} > Cancel </button>
           </div>
         </div>
 
@@ -224,11 +229,11 @@ class App extends Component {
                   },
                   {
                     Header: "DOB",
-                    accessor:'dateOfBirth',
+                    accessor: 'dateOfBirth',
                   },
                   {
                     Header: "Gender",
-                    accessor: 'genderChecked',  
+                    accessor: 'genderChecked',
                   },
                   {
                     Header: "Address",
@@ -245,12 +250,12 @@ class App extends Component {
 
                   },
                   {
-                    Header : "Edit Options",
-                    id :'click-me-button',
-                    Cell: ({row:value}) => (<button onClick={this.editRow({value})}>Edit</button>),
+                    Header: "Edit Options",
+                    id: 'click-me-button',
+                    Cell: ({ row: value }) => (<button onClick={() => this.editRow(value)}>Edit</button>),
                   },
                   {
-                    Cell:({row:value}) => (<button onClick={this.deleteRow({value})}> Delete </button>)
+                    Cell: ({ row: value }) => (<button onClick={() => this.deleteRow(value )}> Delete </button>)
                   },
                 ],
               },
