@@ -16,7 +16,9 @@ class App extends Component {
       genderChecked: "",
       addressDetails: "",
       companyName: "",
-      designation: ""
+      designation: "",
+      indexToEdit: -1,
+      indexToDelete : -1
     };
   }
 
@@ -93,6 +95,9 @@ class App extends Component {
     }
     var { Employee } = this.state;
     var obj = {};
+    if (this.state.indexToEdit !== -1) {
+      obj = Employee[this.state.indexToEdit];
+    }
     obj.firstName = this.state.firstName;
     obj.lastName = this.state.lastName;
     obj.dateOfBirth = this.state.dateOfBirth;
@@ -100,12 +105,13 @@ class App extends Component {
     obj.addressDetails = this.state.addressDetails;
     obj.companyName = this.state.companyName;
     obj.designation = this.state.designation;
-
+    if (this.state.indexToEdit === -1)
     Employee.push(obj);
-
+    else
+    this.setState({indexToEdit: -1});
     this.setState({ firstName: "", lastName: "", dateOfBirth: "", genderChecked: "", addressDetails: "", companyName: "", designation: "" });
     this.setState({ Employee: Employee });
-    //console.log(Employee);
+    
   }
 
   cancelDetails = (e) => {
@@ -113,8 +119,7 @@ class App extends Component {
 
   }
   editRow = (value) => {
-    var  Employee= this.state;
-   // console.log(Employee.indexOf(this.state.firstName));
+    var  {Employee} = this.state;
     this.setState({ firstName: value.firstName })
     this.setState({ lastName: value.lastName })
     this.setState({ genderChecked: value.genderChecked })
@@ -122,28 +127,29 @@ class App extends Component {
     this.setState({ designation: value.designation })
     this.setState({ dateOfBirth: value.dateOfBirth })
     this.setState({ addressDetails: value.addressDetails })
-    //var findIndex = Employee.find()
-    //this.setState({ Employee: Employee });
-    console.log(Employee);
-    //console.log(this.state);
-      
-    
+    var indexToEdit = Employee.findIndex((ele) => {
+      return ele.firstName === value.firstName; 
+    });
+    this.setState({ indexToEdit: indexToEdit });
+    console.log(indexToEdit);
   }
   deleteRow = (value) => {
-    
-    value.firstName = "";
-    value.lastName = "";
-    this.setState({value});
-    
+    var numberOfElement = 1;
+    var {Employee} = this.state;
+    var indexToDelete = Employee.findIndex((ele) => {
+      return ele.firstName === value.firstName; 
+    });
+    var removedElement = Employee.splice(indexToDelete, numberOfElement);
+    console.log(removedElement);
+    this.setState ({ Employee : Employee});
+    //delete Employee.indexToDelete;
+    //this.setState({ indexToDelete: indexToDelete });
+    //console.log(indexToEdit);
+   console.log(indexToDelete); 
     
   }
   render() {
     
-    var isEnable = true;
-    Object.keys(this.state).forEach((val) => {
-      if (!this.state[val])
-        isEnable = false;
-    });
     var { Employee } = this.state;
     return (
       <div>
@@ -207,8 +213,8 @@ class App extends Component {
 
           </form>
           <div>
-            <button className="sub-btn" onClick={this.saveDetails.bind(this)} disabled={!isEnable}> Save </button>
-            <button className="sub-btn" onClick={this.cancelDetails} disabled={!isEnable} > Cancel </button>
+            <button className="sub-btn" onClick={this.saveDetails.bind(this)} > Save </button>
+            <button className="sub-btn" onClick={this.cancelDetails}  > Cancel </button>
           </div>
         </div>
 
@@ -255,7 +261,7 @@ class App extends Component {
                     Cell: ({ row: value }) => (<button onClick={() => this.editRow(value)}>Edit</button>),
                   },
                   {
-                    Cell: ({ row: value }) => (<button onClick={() => this.deleteRow(value )}> Delete </button>)
+                    Cell: ({ row: value }) => (<button onClick={() => this.deleteRow(value)}> Delete </button>)
                   },
                 ],
               },
