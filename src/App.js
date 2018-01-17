@@ -18,13 +18,13 @@ class App extends Component {
       companyName: "",
       designation: "",
       indexToEdit: -1,
-      indexToDelete : -1
+      indexToDelete: -1
     };
   }
 
   handleChangeFname = (e) => {
     this.setState({ firstName: e.target.value })
-
+    
   }
   handleChangelname = (e) => {
     this.setState({ lastName: e.target.value })
@@ -46,32 +46,35 @@ class App extends Component {
     this.setState({ designation: e.target.value })
   }
 
-  saveDetails = () => {
+  validateForm = () => {
+
+    var d = new Date(this.state.dateOfBirth);
+    var today = new Date();
+
+    var dob = this.state.dateOfBirth;
+    var pattern = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
+
     if (this.state.firstName === null || this.state.firstName === "") {
       alert("Enter First Name.....");
       return false;
     }
     if (!/^[a-zA-Z]*$/g.test(this.state.firstName)) {
       alert("Enter the valid First name");
-      return false;
+      return false;  
     }
     if (this.state.lastName === null || this.state.lastName === "") {
       alert("Enter Last Name....");
-      return false;
+      return false;  
     }
-    if (!/^[a-zA-Z]*$/g.test(this.state.lastName)) {
+    if(!/^[a-zA-Z]*$/g.test(this.state.lastName)) {
       alert("Enter the valid Last name");
       return false;
     }
-    if (this.state.dateOfBirth === null || this.state.dateOfBirth === "") {
+    if(this.state.dateOfBirth === null || this.state.dateOfBirth === "") {
       alert("Enter the Date of Birth");
-      return false;
+      return false;  
     }
-    var d = new Date(this.state.dateOfBirth);
-    var today = new Date();
-
-    var dob = this.state.dateOfBirth;
-    var pattern = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
+   
     if (dob === null || dob === "" || !pattern.test(dob) || d > today) {
       alert("Invalid date of birth");
       return false;
@@ -79,25 +82,41 @@ class App extends Component {
     }
     if (this.state.genderChecked === null || this.state.genderChecked === "") {
       alert("Select the Gender....");
-      return false;
+      return false;  
     }
     if (this.state.addressDetails === null || this.state.addressDetails === "") {
       alert("Enter Address....");
-      return false;
+      return false;  
     }
     if (this.state.companyName === null || this.state.companyName === "") {
       alert("Enter the Company Name....");
-      return false;
+      return false;  
     }
     if (this.state.designation === null || this.state.designation === "") {
       alert("Enter the designation");
       return false;
     }
+ }
+
+  saveDetails = () => {
+    if(this.validateForm() === false)
+    {
+      return false;
+    }
+    else
     var { Employee } = this.state;
     var obj = {};
     if (this.state.indexToEdit !== -1) {
       obj = Employee[this.state.indexToEdit];
     }
+    console.log(obj);
+    console.log(this.state);
+    if(obj.firstName === Employee.firstName || obj.lastName === Employee.lastName || obj.dateOfBirth === this.state.dateOfBirth || obj.genderChecked === Employee.genderChecked || obj.addressDetails === Employee.addressDetails || obj.companyName === Employee.companyName || obj.designation === Employee.designation)
+    {
+      alert ("The Details already exist.... ");
+      return false;
+    }
+    else
     obj.firstName = this.state.firstName;
     obj.lastName = this.state.lastName;
     obj.dateOfBirth = this.state.dateOfBirth;
@@ -105,13 +124,15 @@ class App extends Component {
     obj.addressDetails = this.state.addressDetails;
     obj.companyName = this.state.companyName;
     obj.designation = this.state.designation;
+    //console.log(obj);
     if (this.state.indexToEdit === -1)
-    Employee.push(obj);
+      Employee.push(obj);
     else
-    this.setState({indexToEdit: -1});
+      this.setState({ indexToEdit: -1 });
     this.setState({ firstName: "", lastName: "", dateOfBirth: "", genderChecked: "", addressDetails: "", companyName: "", designation: "" });
     this.setState({ Employee: Employee });
-    
+    //console.log(Employee);
+    //console.log(this.state);
   }
 
   cancelDetails = (e) => {
@@ -119,7 +140,7 @@ class App extends Component {
 
   }
   editRow = (value) => {
-    var  {Employee} = this.state;
+    var { Employee } = this.state;
     this.setState({ firstName: value.firstName })
     this.setState({ lastName: value.lastName })
     this.setState({ genderChecked: value.genderChecked })
@@ -128,28 +149,25 @@ class App extends Component {
     this.setState({ dateOfBirth: value.dateOfBirth })
     this.setState({ addressDetails: value.addressDetails })
     var indexToEdit = Employee.findIndex((ele) => {
-      return ele.firstName === value.firstName; 
+      return ele.firstName === value.firstName;
     });
     this.setState({ indexToEdit: indexToEdit });
-    console.log(indexToEdit);
+    //console.log(indexToEdit);
   }
   deleteRow = (value) => {
     var numberOfElement = 1;
-    var {Employee} = this.state;
+    var { Employee } = this.state;
     var indexToDelete = Employee.findIndex((ele) => {
-      return ele.firstName === value.firstName; 
+      return ele.firstName === value.firstName;
     });
     var removedElement = Employee.splice(indexToDelete, numberOfElement);
     console.log(removedElement);
-    this.setState ({ Employee : Employee});
-    //delete Employee.indexToDelete;
-    //this.setState({ indexToDelete: indexToDelete });
-    //console.log(indexToEdit);
-   console.log(indexToDelete); 
-    
+    this.setState({ Employee: Employee });
+    console.log(indexToDelete);
+
   }
   render() {
-    
+
     var { Employee } = this.state;
     return (
       <div>
@@ -214,7 +232,7 @@ class App extends Component {
           </form>
           <div>
             <button className="sub-btn" onClick={this.saveDetails.bind(this)} > Save </button>
-            <button className="sub-btn" onClick={this.cancelDetails}  > Cancel </button>
+            <button className="sub-btn" onClick={this.cancelDetails}> Cancel </button>
           </div>
         </div>
 
