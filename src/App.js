@@ -99,6 +99,7 @@ class App extends Component {
  }
 
   saveDetails = () => {
+    debugger;
     if(this.validateForm() === false)
     {
       return false;
@@ -108,15 +109,18 @@ class App extends Component {
     var obj = {};
     if (this.state.indexToEdit !== -1) {
       obj = Employee[this.state.indexToEdit];
+
     }
+    else{
     console.log(obj);
     console.log(this.state);
-    if(obj.firstName === Employee.firstName || obj.lastName === Employee.lastName || obj.dateOfBirth === this.state.dateOfBirth || obj.genderChecked === Employee.genderChecked || obj.addressDetails === Employee.addressDetails || obj.companyName === Employee.companyName || obj.designation === Employee.designation)
+    if(obj.firstName === this.state.firstName || obj.lastName === this.state.lastName || obj.dateOfBirth === this.state.dateOfBirth || obj.genderChecked === this.state.genderChecked || obj.addressDetails === this.state.addressDetails || obj.companyName === this.state.companyName || obj.designation === this.state.designation)
+    //if(obj.firstName === Employee.firstName || obj.lastName === Employee.lastName || obj.dateOfBirth === Employee.dateOfBirth || obj.genderChecked === Employee.genderChecked || obj.addressDetails === Employee.addressDetails || obj.companyName === Employee.companyName || obj.designation === Employee.designation)
     {
       alert ("The Details already exist.... ");
       return false;
     }
-    else
+  }
     obj.firstName = this.state.firstName;
     obj.lastName = this.state.lastName;
     obj.dateOfBirth = this.state.dateOfBirth;
