@@ -99,7 +99,7 @@ class App extends Component {
  }
 
   saveDetails = () => {
-    debugger;
+    //debugger;
     if(this.validateForm() === false)
     {
       return false;
@@ -107,20 +107,20 @@ class App extends Component {
     else
     var { Employee } = this.state;
     var obj = {};
+    //debugger;
+    console.log(this.state.indexToEdit);
     if (this.state.indexToEdit !== -1) {
       obj = Employee[this.state.indexToEdit];
-
-    }
-    else{
+    
+     if(obj.firstName === this.state.firstName || obj.lastName === this.state.lastName || obj.dateOfBirth === this.state.dateOfBirth || obj.genderChecked === this.state.genderChecked || obj.addressDetails === this.state.addressDetails || obj.companyName === this.state.companyName || obj.designation === this.state.designation)
+      //if(obj.firstName === Employee.firstName || obj.lastName === Employee.lastName || obj.dateOfBirth === Employee.dateOfBirth || obj.genderChecked === Employee.genderChecked || obj.addressDetails === Employee.addressDetails || obj.companyName === Employee.companyName || obj.designation === Employee.designation)
+        {
+          alert ("The Details already exist.... ");
+          return false;
+        }
+      }
     console.log(obj);
     console.log(this.state);
-    if(obj.firstName === this.state.firstName || obj.lastName === this.state.lastName || obj.dateOfBirth === this.state.dateOfBirth || obj.genderChecked === this.state.genderChecked || obj.addressDetails === this.state.addressDetails || obj.companyName === this.state.companyName || obj.designation === this.state.designation)
-    //if(obj.firstName === Employee.firstName || obj.lastName === Employee.lastName || obj.dateOfBirth === Employee.dateOfBirth || obj.genderChecked === Employee.genderChecked || obj.addressDetails === Employee.addressDetails || obj.companyName === Employee.companyName || obj.designation === Employee.designation)
-    {
-      alert ("The Details already exist.... ");
-      return false;
-    }
-  }
     obj.firstName = this.state.firstName;
     obj.lastName = this.state.lastName;
     obj.dateOfBirth = this.state.dateOfBirth;
@@ -129,10 +129,12 @@ class App extends Component {
     obj.companyName = this.state.companyName;
     obj.designation = this.state.designation;
     //console.log(obj);
+  
     if (this.state.indexToEdit === -1)
+    
       Employee.push(obj);
     else
-      this.setState({ indexToEdit: -1 });
+    this.setState({ indexToEdit: -1 });
     this.setState({ firstName: "", lastName: "", dateOfBirth: "", genderChecked: "", addressDetails: "", companyName: "", designation: "" });
     this.setState({ Employee: Employee });
     //console.log(Employee);
