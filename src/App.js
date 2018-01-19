@@ -24,7 +24,7 @@ class App extends Component {
 
   handleChangeFname = (e) => {
     this.setState({ firstName: e.target.value })
-    
+
   }
   handleChangelname = (e) => {
     this.setState({ lastName: e.target.value })
@@ -60,21 +60,21 @@ class App extends Component {
     }
     if (!/^[a-zA-Z]*$/g.test(this.state.firstName)) {
       alert("Enter the valid First name");
-      return false;  
+      return false;
     }
     if (this.state.lastName === null || this.state.lastName === "") {
       alert("Enter Last Name....");
-      return false;  
+      return false;
     }
-    if(!/^[a-zA-Z]*$/g.test(this.state.lastName)) {
+    if (!/^[a-zA-Z]*$/g.test(this.state.lastName)) {
       alert("Enter the valid Last name");
       return false;
     }
-    if(this.state.dateOfBirth === null || this.state.dateOfBirth === "") {
+    if (this.state.dateOfBirth === null || this.state.dateOfBirth === "") {
       alert("Enter the Date of Birth");
-      return false;  
+      return false;
     }
-   
+
     if (dob === null || dob === "" || !pattern.test(dob) || d > today) {
       alert("Invalid date of birth");
       return false;
@@ -82,45 +82,25 @@ class App extends Component {
     }
     if (this.state.genderChecked === null || this.state.genderChecked === "") {
       alert("Select the Gender....");
-      return false;  
+      return false;
     }
     if (this.state.addressDetails === null || this.state.addressDetails === "") {
       alert("Enter Address....");
-      return false;  
+      return false;
     }
     if (this.state.companyName === null || this.state.companyName === "") {
       alert("Enter the Company Name....");
-      return false;  
+      return false;
     }
     if (this.state.designation === null || this.state.designation === "") {
       alert("Enter the designation");
       return false;
     }
- }
+  }
 
-  saveDetails = () => {
-    //debugger;
-    if(this.validateForm() === false)
-    {
-      return false;
-    }
-    else
+  dataInsert = () => {
     var { Employee } = this.state;
     var obj = {};
-    //debugger;
-    console.log(this.state.indexToEdit);
-    if (this.state.indexToEdit !== -1) {
-      obj = Employee[this.state.indexToEdit];
-    
-     if(obj.firstName === this.state.firstName || obj.lastName === this.state.lastName || obj.dateOfBirth === this.state.dateOfBirth || obj.genderChecked === this.state.genderChecked || obj.addressDetails === this.state.addressDetails || obj.companyName === this.state.companyName || obj.designation === this.state.designation)
-      //if(obj.firstName === Employee.firstName || obj.lastName === Employee.lastName || obj.dateOfBirth === Employee.dateOfBirth || obj.genderChecked === Employee.genderChecked || obj.addressDetails === Employee.addressDetails || obj.companyName === Employee.companyName || obj.designation === Employee.designation)
-        {
-          alert ("The Details already exist.... ");
-          return false;
-        }
-      }
-    console.log(obj);
-    console.log(this.state);
     obj.firstName = this.state.firstName;
     obj.lastName = this.state.lastName;
     obj.dateOfBirth = this.state.dateOfBirth;
@@ -128,15 +108,112 @@ class App extends Component {
     obj.addressDetails = this.state.addressDetails;
     obj.companyName = this.state.companyName;
     obj.designation = this.state.designation;
-    //console.log(obj);
-  
-    if (this.state.indexToEdit === -1)
-    
-      Employee.push(obj);
-    else
-    this.setState({ indexToEdit: -1 });
+
+    Employee.push(obj);
     this.setState({ firstName: "", lastName: "", dateOfBirth: "", genderChecked: "", addressDetails: "", companyName: "", designation: "" });
     this.setState({ Employee: Employee });
+  }
+  saveDetails = () => {
+    if (this.validateForm() === false) {
+      return false;
+    }
+    else
+      var { Employee } = this.state;
+    var obj = {};
+   //debugger;
+    //console.log(this.state.indexToEdit);
+
+    if(this.state.Employee.length === 0)
+    {
+     this.dataInsert();
+    
+      
+    }
+    else{
+      // //var arrNames = [];
+      // const {firstName, lastName,genderChecked,addressDetails,companyName,dateOfBirth,designation} = this.state;
+      // obj.firstName = this.state.firstName;
+      // obj.lastName = this.state.lastName;
+      // obj.dateOfBirth = this.state.dateOfBirth;
+      // obj.genderChecked = this.state.genderChecked;
+      // obj.addressDetails = this.state.addressDetails;
+      // obj.companyName = this.state.companyName;
+      // obj.designation = this.state.designation;
+      
+      Object.keys(Employee).forEach((val) => {
+      //console.log(this.state);
+       console.log(Employee);
+       console.log(val);
+        if(Employee[val].firstName === obj.firstName && Employee[val].lastName === obj.lastName && Employee[val].genderChecked === obj.genderChecked && Employee[val].addressDetails === obj.addressDetails && Employee[val].companyName === obj.companyName && Employee[val].designation === obj.designation)
+        {
+          
+          alert("already exist");
+         
+          //this.state.obj = "";
+          //return false;
+        }
+        else{
+          this.dataInsert();
+          //console.log(obj);
+         
+         // console.log(this.state.Employee[i][j]);
+          //Employee.push(obj);
+          
+         // console.log(Employee);
+        }
+      });
+      
+     // console.log(this.state.Employee.length);
+      // for (var i in this.state.Employee) 
+      // {
+      //     for (var j in this.state.Employee[i]) 
+      //     {                  
+            
+           // console.log(this.state);
+            // if (Employee[i][j].firstName === this.state.firstName && Employee[i][j].lastName === this.state.lastName && Employee[i][j].dateOfBirth === this.state.dateOfBirth && Employee[i][j].genderChecked === this.state.genderChecked && Employee[i][j].addressDetails === this.state.addressDetails && Employee[i][j].companyName === this.state.companyName && Employee[i][j].designation === this.state.designation)
+            
+            //       {
+            //          alert("already exist");
+            //           return false; // means there are duplicate values
+            //       }
+               
+         // }
+      //}
+      
+    }
+    //   if (this.state.indexToEdit !== -1) {
+    //   obj = Employee[this.state.indexToEdit];
+
+    //   if (obj.firstName === this.state.firstName && obj.lastName === this.state.lastName && obj.dateOfBirth === this.state.dateOfBirth && obj.genderChecked === this.state.genderChecked && obj.addressDetails === this.state.addressDetails && obj.companyName === this.state.companyName && obj.designation === this.state.designation)
+    //   //if(obj.firstName === Employee.firstName || obj.lastName === Employee.lastName || obj.dateOfBirth === Employee.dateOfBirth || obj.genderChecked === Employee.genderChecked || obj.addressDetails === Employee.addressDetails || obj.companyName === Employee.companyName || obj.designation === Employee.designation)
+    //   {
+    //     alert("The Details already exist.... ");
+    //     return false;
+    //   }
+    // }
+    // console.log(obj);
+    // console.log(this.state);
+    // obj.firstName = this.state.firstName;
+    // obj.lastName = this.state.lastName;
+    // obj.dateOfBirth = this.state.dateOfBirth;
+    // obj.genderChecked = this.state.genderChecked;
+    // obj.addressDetails = this.state.addressDetails;
+    // obj.companyName = this.state.companyName;
+    // obj.designation = this.state.designation;
+    //console.log(obj);
+    //var duplicateData = obj.filter((el ,i ,arr) => arr.indexOf(el) === i); 
+    //console.log(duplicateData);
+   /// Employee.filter(function(value, index){ return Employee.indexOf(value) == index });
+  
+    // if (this.state.indexToEdit === -1)
+
+    //   Employee.push(obj);
+
+    // else
+    //   this.setState({ indexToEdit: -1 });
+    // this.setState({ firstName: "", lastName: "", dateOfBirth: "", genderChecked: "", addressDetails: "", companyName: "", designation: "" });
+    // this.setState({ Employee: Employee });
+    //console.log(this.state.indexToEdit);
     //console.log(Employee);
     //console.log(this.state);
   }
